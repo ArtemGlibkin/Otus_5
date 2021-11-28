@@ -13,7 +13,7 @@ class Matrix
 	/*!
 	\brief Класс для хранения элемента матрицы
 	*/
-	template<typename T>
+	template<typename U>
 	struct Node
 	{
 		int row;
@@ -45,16 +45,16 @@ class Matrix
 			deleter = func;
 		}
 		
-		operator std::tuple <int&, int&, T&>() {
+		operator std::tuple <int&, int&, U&>() {
 			return std::make_tuple(std::ref(row), std::ref(column), std::ref(value));
 		}
 
-		bool operator==(const T& val)
+		bool operator==(const U& val)
 		{
 			return value == val;
 		}
 
-		void operator=(const T& val) {
+		void operator=(const U& val) {
 			if (val == default_val)
 			{
 				delete_node();
@@ -75,11 +75,11 @@ class Matrix
 	/*!
 	\brief Класс для хранения строки матрицы
 	*/
-	template<typename T>
+	template<typename U>
 	struct Row
 	{
 		int row;
-		std::list<Node<T>> nodes;
+		std::list<Node<U>> nodes;
 		deleter_func deleter;
 
 		Row(int r) : row(r) {}
@@ -113,7 +113,7 @@ class Matrix
 		}
 
 
-		Node<T>& operator[](int column)
+		Node<U>& operator[](int column)
 		{
 			auto it = nodes.begin();
 			for (it; it != nodes.end(); it++)
@@ -130,7 +130,7 @@ class Matrix
 	private:
 
 		using iterator = decltype(nodes.begin());
-		iterator addColumn(iterator it, int row, int column, T&& value)
+		iterator addColumn(iterator it, int row, int column, U&& value)
 		{
 			it = nodes.insert(it, Node<T>(row, column, value));
 			it->set_deleter(
